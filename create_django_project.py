@@ -170,10 +170,6 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 SECRET_KEY = '{{ secretkey }}'
 """
 
-def generate_secret_key():
-    # FIXME find out what Django does
-    return 'rxadg3+bk(%d1=(g=z2oy4t3f7bgk@^mr4+@xly!zvssnw4(7n'
-
 def create_project_template(projectname, **options):
     if os.path.exists(projectname):
         print 'skipping %s, directory exists' % projectname
@@ -246,6 +242,12 @@ def render_template(template_string, filepath, context):
     template_file = open(os.path.sep.join(filepath), 'w')
     template_file.write(template_string)
     template_file.close()
+
+def generate_secret_key():
+    """
+    Generates a SECRET_KEY for Django settings module.
+    """
+    return ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
 
 def main():
     try:
