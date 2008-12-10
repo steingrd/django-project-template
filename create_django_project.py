@@ -18,6 +18,7 @@ Usage:
 
 import getopt
 import os
+import random
 import sys
 
 ENVIRONMENT_SH_TEMPLATE = """#!/bin/bash -x
@@ -247,7 +248,8 @@ def generate_secret_key():
     """
     Generates a SECRET_KEY for Django settings module.
     """
-    return ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+    return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') 
+                    for i in range(50)])
 
 def main():
     try:
