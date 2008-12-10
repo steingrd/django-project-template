@@ -16,28 +16,27 @@ Project structure
 The project structure created by the script is a bit different than the
 standard Django project structure::
 
-myproject/
-    environment.sh
-    templates/
-        base.html
-        myapp/
-            index.html
-    scripts/
-        manage.py
-    python/
-        myapp/
-            __init__.py
-            urls.py
-    	    views.py
-    	    forms.py
-	    models.py
-        myproject/
-            __init__.py
-    	    urls.py
-    	    settings.py
-    media/
-        default.css
-
+  myproject/
+      environment.sh
+      templates/
+          base.html
+          myapp/
+              index.html
+      scripts/
+          manage.py
+      python/
+          myapp/
+              __init__.py
+              urls.py
+    	      views.py
+    	      forms.py
+	      models.py
+          myproject/
+              __init__.py
+    	      urls.py
+    	      settings.py
+      media/
+          default.css
 
 
 
