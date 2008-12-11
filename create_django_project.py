@@ -160,8 +160,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.doc.XViewMiddleware',
 )
 
-DATABASE_ENGINE = ''  
-DATABASE_NAME = '' 
+DATABASE_ENGINE = 'sqlite3'  
+DATABASE_NAME = '{{ projectname }}.db' 
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST = ''           
