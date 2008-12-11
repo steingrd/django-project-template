@@ -63,4 +63,4 @@ MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
 MEDIA_URL = 'http://localhost:8080/media/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-SECRET_KEY = 'rxadg3+bk(%d1=(g=z2oy4t3f7bgk@^mr4+@xly!zvssnw4(7n'
+SECRET_KEY = '(nb3q_1o1r3w0etx)a#^=ox0sks0g(sdw5n0urf6&)465v$t!a'

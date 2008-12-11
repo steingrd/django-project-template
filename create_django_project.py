@@ -23,9 +23,9 @@ import sys
 
 ENVIRONMENT_SH_TEMPLATE = """#!/bin/bash -x
 
-export DJANGO_SETTINGS_MODULE="{{ projectname }}.settings"
 export PYTHONPATH="$PWD/python:$PYTHONPATH"
 export PATH="$PWD/scripts:$PATH"
+export DJANGO_SETTINGS_MODULE="{{ projectname }}.settings"
 export DJANGO_TEMPLATE_PATH="$PWD/templates"
 export DJANGO_MEDIA_ROOT="$PWD/media"
 """
@@ -35,10 +35,16 @@ DEFAULT_CSS_TEMPLATE = """/* default stylesheet, add styles here */
 
 MANAGE_PY_TEMPLATE = """#!/usr/bin/env python
 
+from django.core.management import execute_manager
+from os import getcwd, environ, path
+import sys
+
 if __name__ == "__main__":
-    from django.core.management import execute_manager
-    from os import getenv
-    settings_module = getenv('DJANGO_SETTINGS_MODULE')
+    environ['DJANGO_SETTINGS_MODULE'] = '{{ projectname }}.settings'
+    environ['DJANGO_MEDIA_ROOT'] = path.join(getcwd(), 'media')
+    environ['DJANGO_TEMPLATE_PATH'] = path.join(getcwd(), 'templates')
+    sys.path.insert(0, path.join(getcwd(), 'python'))
+    settings_module = '{{ projectname }}.settings'
     settings = __import__(settings_module, locals(), globals(), [settings_module.split('.')[-1]])
     execute_manager(settings)
 """
@@ -205,8 +211,8 @@ def create_project_template(projectname, **options):
     
     render_template(BASE_HTML_TEMPLATE, (projectname, 'templates', 'base.html'), context)
     render_template(INDEX_HTML_TEMPLATE, (projectname, 'templates', appname, 'index.html'), context)
-    render_template(MANAGE_PY_TEMPLATE, (projectname, 'scripts', 'manage.py'), context)
     render_template(DEFAULT_CSS_TEMPLATE, (projectname, 'media', 'default.css'), context)
+    render_template(MANAGE_PY_TEMPLATE, (projectname, 'manage.py'), context)
     render_template(ENVIRONMENT_SH_TEMPLATE, (projectname, 'environment.sh'), context)
 
 def create_directory(dirname, *args):
