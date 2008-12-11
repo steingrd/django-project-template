@@ -18,12 +18,12 @@ standard Django project structure::
 
   myproject/
       environment.sh
+      manage.py
       templates/
           base.html
           myapp/
               index.html
       scripts/
-          manage.py
       python/
           myapp/
               __init__.py
