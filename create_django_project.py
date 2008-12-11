@@ -202,21 +202,21 @@ def create_project_template(projectname, **options):
     secretkey = generate_secret_key()
     context = { 'projectname' : projectname, 'appname' : appname, 'secretkey' : secretkey }
 
-    render_template('', (projectname, 'python', appname, '__init__.py'), {})
-    render_template(APP_URLS_PY_TEMPLATE, (projectname, 'python', appname, 'urls.py'), context)
-    render_template(VIEWS_PY_TEMPLATE, (projectname, 'python', appname, 'views.py'), context)
-    render_template(MODELS_PY_TEMPLATE, (projectname, 'python', appname, 'models.py'), context)
-    render_template(FORMS_PY_TEMPLATE, (projectname, 'python', appname, 'forms.py'), context)
+    render_template('', {}, projectname, 'python', appname, '__init__.py')
+    render_template(APP_URLS_PY_TEMPLATE, context, projectname, 'python', appname, 'urls.py')
+    render_template(VIEWS_PY_TEMPLATE, context, projectname, 'python', appname, 'views.py')
+    render_template(MODELS_PY_TEMPLATE, context, projectname, 'python', appname, 'models.py')
+    render_template(FORMS_PY_TEMPLATE, context, projectname, 'python', appname, 'forms.py')
 
-    render_template('', (projectname, 'python', projectname, '__init__.py'), {})
-    render_template(PROJECT_URLS_PY_TEMPLATE, (projectname, 'python', projectname, 'urls.py'), context)
-    render_template(SETTINGS_PY_TEMPLATE, (projectname, 'python', projectname, 'settings.py'), context)
+    render_template('', context, projectname, 'python', projectname, '__init__.py')
+    render_template(PROJECT_URLS_PY_TEMPLATE, context, projectname, 'python', projectname, 'urls.py')
+    render_template(SETTINGS_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings.py')
     
-    render_template(BASE_HTML_TEMPLATE, (projectname, 'templates', 'base.html'), context)
-    render_template(INDEX_HTML_TEMPLATE, (projectname, 'templates', appname, 'index.html'), context)
-    render_template(DEFAULT_CSS_TEMPLATE, (projectname, 'media', 'default.css'), context)
-    render_template(MANAGE_PY_TEMPLATE, (projectname, 'manage.py'), context)
-    render_template(ENVIRONMENT_SH_TEMPLATE, (projectname, 'environment.sh'), context)
+    render_template(BASE_HTML_TEMPLATE, context, projectname, 'templates', 'base.html')
+    render_template(INDEX_HTML_TEMPLATE, context, projectname, 'templates', appname, 'index.html')
+    render_template(DEFAULT_CSS_TEMPLATE, context, projectname, 'media', 'default.css')
+    render_template(MANAGE_PY_TEMPLATE, context, projectname, 'manage.py')
+    render_template(ENVIRONMENT_SH_TEMPLATE, context, projectname, 'environment.sh')
 
 def create_directory(dirname, *args):
     """
@@ -238,7 +238,7 @@ def create_directory(dirname, *args):
                 os.mkdir(newdir)
             root  = newdir
 
-def render_template(template_string, filepath, context):
+def render_template(template_string, context, *filepath):
     """
     Renders the template string ``template_string`` to the file path
     given as a list in ``filepath`` with ``context``.
@@ -249,7 +249,7 @@ def render_template(template_string, filepath, context):
     """
     for key, value in context.items():
         template_string = template_string.replace('{{ %s }}' % key, value)
-    template_file = open(os.path.sep.join(filepath), 'w')
+    template_file = open(os.path.join(*filepath), 'w')
     template_file.write(template_string)
     template_file.close()
 
