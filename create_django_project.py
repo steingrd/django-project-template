@@ -5,14 +5,17 @@
 
 """create-django-project.py
 
-Creates a Django project directory structure with skeleton templates and
-default views. The root directory is created in the current directory.
+Creates a runnable, functional Django project with two applications: a
+project application and a default application. Applications are created
+with sensible skeleton Python modules and templates.
 
 Usage:
 
     create-django-project.py [options] projectname 
 
--a NAME, --appname=NAME     name of default application, default is myapp
+Options:
+
+    -a NAME, --appname=NAME     name of application, default is myapp
 
 """
 
