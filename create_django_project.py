@@ -3,8 +3,7 @@
 
 # Copyright (c) 2008 by Steingrim Dovland <steingrd@ifi.uio.no>
 
-"""create-django-project.py
-
+"""
 Creates a runnable, functional Django project with two applications: a
 project application and a default application. Applications are created
 with sensible skeleton Python modules and templates.
@@ -15,9 +14,7 @@ Usage:
 
 Options:
 
-    -a NAME, --appname=NAME     name of application, default is myapp
-
-"""
+    -a NAME, --appname=NAME     name of application, default is myapp"""
 
 import getopt
 import os
@@ -276,6 +273,10 @@ def main():
         sys.exit(2)
 
     options = {}
+
+    if not args:
+        print __doc__
+        sys.exit(0)
 
     for o, a in opts:
         if o in ("-h", "--help"):
