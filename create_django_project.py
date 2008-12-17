@@ -102,9 +102,26 @@ urlpatterns = patterns('',
 """
 
 MODELS_PY_TEMPLATE = """
+from django.db import models
+ 
+class Entry(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'entries'
+ 
+    def __unicode__(self):
+        return self.title
 """
 
 VIEWS_PY_TEMPLATE = """
+from django.shortcuts import get_object_or_404, render_to_response
+from django.http import HttpResponse
+
+def {{ appname }}_index(request):
+    return HttpResponse('Hello, {{ appname }}')
 """
 
 FORMS_PY_TEMPLATE = """
