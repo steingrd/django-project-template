@@ -15,6 +15,7 @@ Usage:
 Options:
 
     -a NAME, --appname=NAME     name of application, default is myapp
+    -q, --quiet                 supress informational output messages
     -h, --help                  show this message"""
 
 import getopt
@@ -207,6 +208,11 @@ def create_project_template(projectname, **options):
     else:
         appname = 'myapp'
 
+    if 'quiet' in options:
+        quiet = options['quiet']
+    else:
+        quiet = False
+
     create_directory(projectname)
     create_directory(projectname, 'media')
     create_directory(projectname, 'python')
@@ -236,6 +242,8 @@ def create_project_template(projectname, **options):
     # set executable flag for manage.py
     os.chmod(os.path.join(projectname, 'manage.py'), stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
 
+    if not quiet:
+        print 'Project %s created with application %s' % (projectname, appname)
 
 def create_directory(dirname, *args):
     """
@@ -284,7 +292,7 @@ def generate_secret_key():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ha:", ["help", "appname="])
+        opts, args = getopt.getopt(sys.argv[1:], "ha:q", ["help", "appname=", "quiet"])
     except getopt.error, msg:
         print msg
         print "for help use --help"
@@ -302,6 +310,8 @@ def main():
             sys.exit(0)
         if o in ("-a", "--appname"):
             options['appname' ] = a
+        if o in ("-q", "--quiet"):
+            options['quiet' ] = True
 
     for a in args:
         create_project_template(a, **options)
