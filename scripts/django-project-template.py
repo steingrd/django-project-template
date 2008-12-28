@@ -14,7 +14,8 @@ Usage:
 
 Options:
 
-    -a NAME, --appname=NAME     name of application, default is myapp"""
+    -a NAME, --appname=NAME     name of application, default is myapp
+    -h, --help                  show this message"""
 
 import getopt
 import os
@@ -283,7 +284,7 @@ def generate_secret_key():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ha:", ["help", "appname"])
+        opts, args = getopt.getopt(sys.argv[1:], "ha:", ["help", "appname="])
     except getopt.error, msg:
         print msg
         print "for help use --help"
