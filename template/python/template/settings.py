@@ -27,7 +27,7 @@ TEMPLATE_DIRS = (
     os.getenv('DJANGO_TEMPLATE_PATH'),
 )
 
-TEMPLATE_CONTEXT_PROCESSORS =  (
+TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.auth',
     'django.core.context_processors.media',
@@ -46,11 +46,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.doc.XViewMiddleware',
 )
 
-DATABASE_ENGINE = 'sqlite3'  
-DATABASE_NAME = 'template.db' 
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = 'template.db'
 DATABASE_USER = ''
 DATABASE_PASSWORD = ''
-DATABASE_HOST = ''           
+DATABASE_HOST = ''
 DATABASE_PORT = ''
 
 TIME_ZONE = 'Europe/Oslo'
@@ -63,4 +63,4 @@ MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
 MEDIA_URL = 'http://localhost:8080/media/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-SECRET_KEY = 'izyh%^aj&w1b0pp^y=+!c8_yiu)@rn4$r(^3*1jyb(tfx_j4+_'
+SECRET_KEY = 'w54sk!qf#^%t3+*s6!cc8s_j$1^uoa__6xl#a2i75#@%n$ah=5'

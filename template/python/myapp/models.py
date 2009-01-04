@@ -1,6 +1,8 @@
+#!/usr/bin/env python
 
 from django.db import models
- 
+
+
 class Entry(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -8,6 +10,6 @@ class Entry(models.Model):
 
     class Meta:
         verbose_name_plural = 'entries'
- 
+
     def __unicode__(self):
         return self.title

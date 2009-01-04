@@ -1,9 +1,9 @@
 #!/bin/bash
 for dir in templates python media; do
     if [ ! -d "$dir" ]; then
-	echo "expected directory '$dir' in current directory";
-	echo "are you running $(basename $0) from project root?";
-	exit 1;
+        echo "expected directory '$dir' in current directory";
+        echo "are you running $(basename $0) from project root?";
+        exit 1;
     fi
 done
 cat <<EOF
