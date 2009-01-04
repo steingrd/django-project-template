@@ -361,16 +361,14 @@ import sys, os
 
 sys.path.insert(0, "$PWD/python")
 
-from django.core.handlers.wsgi import WSGIHandler
-from flup.server.fcgi import WSGIServer
-
 os.chdir("$PWD")
 
 os.environ['DJANGO_MEDIA_ROOT'] = '$PWD/media'
 os.environ['DJANGO_TEMPLATE_PATH'] = '$PWD/templates'
 os.environ['DJANGO_SETTINGS_MODULE'] = '{{ projectname }}.settings_prod'
 
-WSGIServer(WSGIHandler()).run()
+from django.core.servers.fastcgi import runfastcgi
+runfastcgi(method="threaded", daemonize="false")
 EOF
 """
 
