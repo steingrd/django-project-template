@@ -24,6 +24,129 @@ import random
 import stat
 import sys
 
+
+def create_project_template(projectname, **options):
+    if os.path.exists(projectname):
+        print 'skipping %s, directory exists' % projectname
+        return
+
+    if 'appname' in options:
+        appname = options['appname']
+    else:
+        appname = 'myapp'
+
+    if 'quiet' in options:
+        quiet = options['quiet']
+    else:
+        quiet = False
+
+    create_directory(projectname)
+    create_directory(projectname, 'media')
+    create_directory(projectname, 'python')
+    create_directory(projectname, 'python', appname)
+    create_directory(projectname, 'python', projectname)
+    create_directory(projectname, 'scripts')
+    create_directory(projectname, 'templates')
+    create_directory(projectname, 'templates', appname)
+
+    secretkey = generate_secret_key()
+    context = { 'projectname' : projectname, 'appname' : appname, 'secretkey' : secretkey }
+
+    render_template('', {}, projectname, 'python', appname, '__init__.py')
+    render_template(APP_URLS_PY_TEMPLATE, context, projectname, 'python', appname, 'urls.py')
+    render_template(VIEWS_PY_TEMPLATE, context, projectname, 'python', appname, 'views.py')
+    render_template(MODELS_PY_TEMPLATE, context, projectname, 'python', appname, 'models.py')
+    render_template(FORMS_PY_TEMPLATE, context, projectname, 'python', appname, 'forms.py')
+    render_template('', context, projectname, 'python', projectname, '__init__.py')
+    render_template(PROJECT_URLS_PY_TEMPLATE, context, projectname, 'python', projectname, 'urls.py')
+    render_template(SETTINGS_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings.py')
+    render_template(BASE_HTML_TEMPLATE, context, projectname, 'templates', 'base.html')
+    render_template(TEMPLATE_404_TEMPLATE, {}, projectname, 'templates', '404.html')
+    render_template(TEMPLATE_500_TEMPLATE, {}, projectname, 'templates', '500.html')
+    render_template(INDEX_HTML_TEMPLATE, context, projectname, 'templates', appname, 'index.html')
+    render_template(DEFAULT_CSS_TEMPLATE, context, projectname, 'media', 'default.css')
+    render_template(MANAGE_PY_TEMPLATE, context, projectname, 'manage.py')
+    render_template(ENVIRONMENT_SH_TEMPLATE, context, projectname, 'environment.sh')
+    render_template(GENERATE_FCGI_SH_TEMPLATE, context, projectname, 'scripts', 'generate_fcgi.sh')
+
+    # set executable flag for manage.py
+    os.chmod(os.path.join(projectname, 'manage.py'), stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
+
+    if not quiet:
+        print 'Project %s created with application %s' % (projectname, appname)
+
+def create_directory(dirname, *args):
+    """
+    Creates a directory named ``dirname`` if possible. Subdirectories of
+    ``dirname`` can be specified in *args.
+
+    Example: create_directory('foo', 'bar', 'zot') creates the
+    directories foo/bar/zot/ in the current directory.
+    
+    """
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
+    
+    if args:
+        root = dirname
+        for subdir in args:
+            newdir = os.path.join(root, subdir)
+            if not os.path.exists(newdir):
+                os.mkdir(newdir)
+            root  = newdir
+
+
+def render_template(template_string, context, *filepath):
+    """
+    Renders the template string ``template_string`` to the file path
+    given as a list in ``filepath`` with ``context``.
+
+    Example: render_template(string, ('foo', 'bar', 'zot.html'),
+    context) renders the file zot.html in the directory foo/bar/.
+
+    """
+    for key, value in context.items():
+        template_string = template_string.replace('{{ %s }}' % key, value)
+    template_file = open(os.path.join(*filepath), 'w')
+    template_file.write(template_string)
+    template_file.close()
+
+
+def generate_secret_key():
+    """
+    Generates a SECRET_KEY for Django settings module.
+    """
+    return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') 
+                    for i in range(50)])
+
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "ha:q", ["help", "appname=", "quiet"])
+    except getopt.error, msg:
+        print msg
+        print "for help use --help"
+        sys.exit(2)
+
+    options = {}
+
+    if not args:
+        print __doc__
+        sys.exit(0)
+
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            print __doc__
+            sys.exit(0)
+        if o in ("-a", "--appname"):
+            options['appname' ] = a
+        if o in ("-q", "--quiet"):
+            options['quiet' ] = True
+
+    for a in args:
+        create_project_template(a, **options)
+
+
 ENVIRONMENT_SH_TEMPLATE = """#!/bin/bash -x
 
 export PYTHONPATH="$PWD/python:$PYTHONPATH"
@@ -237,127 +360,6 @@ WSGIServer(WSGIHandler()).run()
 EOF
 """
 
-
-def create_project_template(projectname, **options):
-    if os.path.exists(projectname):
-        print 'skipping %s, directory exists' % projectname
-        return
-
-    if 'appname' in options:
-        appname = options['appname']
-    else:
-        appname = 'myapp'
-
-    if 'quiet' in options:
-        quiet = options['quiet']
-    else:
-        quiet = False
-
-    create_directory(projectname)
-    create_directory(projectname, 'media')
-    create_directory(projectname, 'python')
-    create_directory(projectname, 'python', appname)
-    create_directory(projectname, 'python', projectname)
-    create_directory(projectname, 'scripts')
-    create_directory(projectname, 'templates')
-    create_directory(projectname, 'templates', appname)
-
-    secretkey = generate_secret_key()
-    context = { 'projectname' : projectname, 'appname' : appname, 'secretkey' : secretkey }
-
-    render_template('', {}, projectname, 'python', appname, '__init__.py')
-    render_template(APP_URLS_PY_TEMPLATE, context, projectname, 'python', appname, 'urls.py')
-    render_template(VIEWS_PY_TEMPLATE, context, projectname, 'python', appname, 'views.py')
-    render_template(MODELS_PY_TEMPLATE, context, projectname, 'python', appname, 'models.py')
-    render_template(FORMS_PY_TEMPLATE, context, projectname, 'python', appname, 'forms.py')
-    render_template('', context, projectname, 'python', projectname, '__init__.py')
-    render_template(PROJECT_URLS_PY_TEMPLATE, context, projectname, 'python', projectname, 'urls.py')
-    render_template(SETTINGS_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings.py')
-    render_template(BASE_HTML_TEMPLATE, context, projectname, 'templates', 'base.html')
-    render_template(TEMPLATE_404_TEMPLATE, {}, projectname, 'templates', '404.html')
-    render_template(TEMPLATE_500_TEMPLATE, {}, projectname, 'templates', '500.html')
-    render_template(INDEX_HTML_TEMPLATE, context, projectname, 'templates', appname, 'index.html')
-    render_template(DEFAULT_CSS_TEMPLATE, context, projectname, 'media', 'default.css')
-    render_template(MANAGE_PY_TEMPLATE, context, projectname, 'manage.py')
-    render_template(ENVIRONMENT_SH_TEMPLATE, context, projectname, 'environment.sh')
-    render_template(GENERATE_FCGI_SH_TEMPLATE, context, projectname, 'scripts', 'generate_fcgi.sh')
-
-    # set executable flag for manage.py
-    os.chmod(os.path.join(projectname, 'manage.py'), stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
-
-    if not quiet:
-        print 'Project %s created with application %s' % (projectname, appname)
-
-def create_directory(dirname, *args):
-    """
-    Creates a directory named ``dirname`` if possible. Subdirectories of
-    ``dirname`` can be specified in *args.
-
-    Example: create_directory('foo', 'bar', 'zot') creates the
-    directories foo/bar/zot/ in the current directory.
-    
-    """
-    if not os.path.exists(dirname):
-        os.mkdir(dirname)
-    
-    if args:
-        root = dirname
-        for subdir in args:
-            newdir = os.path.join(root, subdir)
-            if not os.path.exists(newdir):
-                os.mkdir(newdir)
-            root  = newdir
-
-
-def render_template(template_string, context, *filepath):
-    """
-    Renders the template string ``template_string`` to the file path
-    given as a list in ``filepath`` with ``context``.
-
-    Example: render_template(string, ('foo', 'bar', 'zot.html'),
-    context) renders the file zot.html in the directory foo/bar/.
-
-    """
-    for key, value in context.items():
-        template_string = template_string.replace('{{ %s }}' % key, value)
-    template_file = open(os.path.join(*filepath), 'w')
-    template_file.write(template_string)
-    template_file.close()
-
-
-def generate_secret_key():
-    """
-    Generates a SECRET_KEY for Django settings module.
-    """
-    return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') 
-                    for i in range(50)])
-
-
-def main():
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "ha:q", ["help", "appname=", "quiet"])
-    except getopt.error, msg:
-        print msg
-        print "for help use --help"
-        sys.exit(2)
-
-    options = {}
-
-    if not args:
-        print __doc__
-        sys.exit(0)
-
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            print __doc__
-            sys.exit(0)
-        if o in ("-a", "--appname"):
-            options['appname' ] = a
-        if o in ("-q", "--quiet"):
-            options['quiet' ] = True
-
-    for a in args:
-        create_project_template(a, **options)
 
 if __name__ == "__main__":
     main()
