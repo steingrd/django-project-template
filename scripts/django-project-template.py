@@ -60,6 +60,7 @@ def create_project_template(projectname, **options):
     render_template('', context, projectname, 'python', projectname, '__init__.py')
     render_template(PROJECT_URLS_PY_TEMPLATE, context, projectname, 'python', projectname, 'urls.py')
     render_template(SETTINGS_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings.py')
+    render_template(SETTINGS_PROD_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings_prod.py')
     render_template(BASE_HTML_TEMPLATE, context, projectname, 'templates', 'base.html')
     render_template(TEMPLATE_404_TEMPLATE, {}, projectname, 'templates', '404.html')
     render_template(TEMPLATE_500_TEMPLATE, {}, projectname, 'templates', '500.html')
@@ -263,6 +264,19 @@ def {{ appname }}_index(request):
 """
 
 FORMS_PY_TEMPLATE = """
+"""
+
+SETTINGS_PROD_PY_TEMPLATE = """from settings import *
+
+DATABASE_ENGINE = ''
+DATABASE_NAME = ''
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
+DATABASE_HOST = ''
+DATABASE_PORT = ''
+
+DEBUG = False
+TEMPLATE_DEBUG = False
 """
 
 SETTINGS_PY_TEMPLATE = """import os

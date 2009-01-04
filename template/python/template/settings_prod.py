@@ -1,0 +1,11 @@
+from settings import *
+
+DATABASE_ENGINE = ''
+DATABASE_NAME = ''
+DATABASE_USER = ''
+DATABASE_PASSWORD = ''
+DATABASE_HOST = ''
+DATABASE_PORT = ''
+
+DEBUG = False
+TEMPLATE_DEBUG = False
