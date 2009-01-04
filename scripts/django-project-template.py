@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2008 by Steingrim Dovland <steingrd@ifi.uio.no>
+# Copyright (c) 2008, 2009 by Steingrim Dovland <steingrd@ifi.uio.no>
 
 """
 Creates a runnable, functional Django project with two applications: a
@@ -71,6 +71,19 @@ BASE_HTML_TEMPLATE = """<html>
 INDEX_HTML_TEMPLATE = """{% extends "base.html" %}
 {% block content %}
 Hello, world! Greetings from {{ appname }}
+{% endblock %}
+"""
+
+TEMPLATE_404_TEMPLATE = """{% extends "base.html" %}
+{% block content %}
+<h1>404 Not Found</h1>
+<p>Resource {{ request_path }} not found</p>
+{% endblock %}
+"""
+
+TEMPLATE_500_TEMPLATE = """{% extends "base.html" %}
+{% block content %}
+<h1>500 Internal Server Error</h1>
 {% endblock %}
 """
 
@@ -234,6 +247,8 @@ def create_project_template(projectname, **options):
     render_template(PROJECT_URLS_PY_TEMPLATE, context, projectname, 'python', projectname, 'urls.py')
     render_template(SETTINGS_PY_TEMPLATE, context, projectname, 'python', projectname, 'settings.py')
     render_template(BASE_HTML_TEMPLATE, context, projectname, 'templates', 'base.html')
+    render_template(TEMPLATE_404_TEMPLATE, {}, projectname, 'templates', '404.html')
+    render_template(TEMPLATE_500_TEMPLATE, {}, projectname, 'templates', '500.html')
     render_template(INDEX_HTML_TEMPLATE, context, projectname, 'templates', appname, 'index.html')
     render_template(DEFAULT_CSS_TEMPLATE, context, projectname, 'media', 'default.css')
     render_template(MANAGE_PY_TEMPLATE, context, projectname, 'manage.py')
