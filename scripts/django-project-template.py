@@ -61,8 +61,7 @@ def create_project_template(project, **options):
     render('', ctx, project, 'python', project, '__init__.py')
     render(PROJECT_URLS_PY, ctx, project, 'python', project, 'urls.py')
     render(SETTINGS_PY, ctx, project, 'python', project, 'settings.py')
-    render(SETTINGS_PROD_PY, ctx, project, 'python', project,
-           'settings_prod.py')
+    render(SETTINGS_PROD, ctx, project, 'python', project, 'settings_prod.py')
     render(BASE_HTML, ctx, project, 'templates', 'base.html')
     render(TEMPLATE_404, {}, project, 'templates', '404.html')
     render(TEMPLATE_500, {}, project, 'templates', '500.html')
@@ -279,7 +278,7 @@ def {{ appname }}_index(request):
     return HttpResponse('Hello, {{ appname }}')
 """
 
-SETTINGS_PROD_PY = """from settings import *
+SETTINGS_PROD = """from settings import *
 
 DATABASE_ENGINE = ''
 DATABASE_NAME = ''
