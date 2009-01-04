@@ -368,7 +368,7 @@ os.chdir("$PWD")
 
 os.environ['DJANGO_MEDIA_ROOT'] = '$PWD/media'
 os.environ['DJANGO_TEMPLATE_PATH'] = '$PWD/templates'
-os.environ['DJANGO_SETTINGS_MODULE'] = '{{ projectname }}.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = '{{ projectname }}.settings_prod'
 
 WSGIServer(WSGIHandler()).run()
 EOF
