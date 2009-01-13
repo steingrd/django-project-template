@@ -68,12 +68,10 @@ def create_project_template(project, **options):
     render(INDEX_HTML, ctx, project, 'templates', appname, 'index.html')
     render(DEFAULT_CSS, ctx, project, 'media', 'default.css')
     render(MANAGE_PY, ctx, project, 'manage.py')
+    set_executable(project, 'manage.py')
     render(ENVIRONMENT_SH, ctx, project, 'environment.sh')
     render(GENERATE_FCGI_SH, ctx, project, 'scripts', 'generate_fcgi.sh')
-
-    # set executable flag for manage.py
-    os.chmod(os.path.join(project, 'manage.py'),
-             stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
+    set_executable(project, 'scripts', 'generate_fcgi.sh')
 
     if not quiet:
         print 'Project %s created with application %s' % (project, appname)
@@ -99,6 +97,18 @@ def create_directory(dirname, *args):
                 os.mkdir(newdir)
             root = newdir
 
+
+def set_executable(*filepath):
+    """
+    Set the executable flag for the file path given as a liste in
+    ``filepath``.
+
+    Example: set_executable('foo','bar.sh') sets the executable flag
+    for the file foo/bar.sh.
+
+    """
+    file = os.path.join(*filepath)
+    os.chmod(file, stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
 
 def render(template_string, context, *filepath):
     """
